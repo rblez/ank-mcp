@@ -12,7 +12,6 @@ export function registerSystemTools(server) {
       "📦 Node      : " + run("node -v"),
       "🐧 Kernel    : " + run("uname -r"),
     ];
-    return { content: [{ type: "text", text: lines.join("
-") }] };
+    return { content: [{ type: "text", text: lines.join("\n") }] };
   });
 }

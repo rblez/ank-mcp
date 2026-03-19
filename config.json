@@ -1,10 +1,9 @@
 {
-  "token": "1e0c9db7-24c0-4389-a551-0b428de4656c",
-  "port": 3000,
+  "token": "o-eht29u-7hl1-zzgi-5qqe-e1hcst7z8at-",
+  "port": 8000,
   "allowed_paths": [
     "/sdcard",
     "/data/data/com.termux/files/home"
   ],
   "allow_shell": true
 }
-

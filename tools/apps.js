@@ -10,7 +10,7 @@ export function registerAppsTools(server) {
     { filter: z.string().optional().describe("Filtro ej: com.google") },
     async ({ filter = "" }) => {
       try {
-        const out = filter ? run("pm list packages | grep "" + filter + """) : run("pm list packages");
+        const out = filter ? run(`pm list packages | grep "${filter}"`) : run("pm list packages");
         return { content: [{ type: "text", text: out }] };
       } catch (e) { return { content: [{ type: "text", text: "❌ " + e.message }] }; }
     }
@@ -21,7 +21,7 @@ export function registerAppsTools(server) {
     { package: z.string().describe("Package name ej: com.whatsapp") },
     async ({ package: pkg }) => {
       try {
-        run("monkey -p " + pkg + " -c android.intent.category.LAUNCHER 1");
+        run(`monkey -p ${pkg} -c android.intent.category.LAUNCHER 1`);
         return { content: [{ type: "text", text: "✅ Abriendo " + pkg }] };
       } catch (e) { return { content: [{ type: "text", text: "❌ " + e.message }] }; }
     }

@@ -24,8 +24,8 @@ export function registerShellTools(server, config) {
     { command: z.string(), logfile: z.string().optional() },
     async ({ command, logfile = "/data/data/com.termux/files/home/bg.log" }) => {
       try {
-        execSync("nohup sh -c '" + command + "' >> " + logfile + " 2>&1 &");
-        return { content: [{ type: "text", text: "✅ Corriendo en background. Log: " + logfile }] };
+        execSync(`nohup sh -c '${command.replace(/'/g, "'\\''")}' >> ${logfile} 2>&1 &`);
+        return { content: [{ type: "text", text: `✅ Corriendo en background. Log: ${logfile}` }] };
       } catch (err) {
         return { content: [{ type: "text", text: "❌ " + err.message }] };
       }

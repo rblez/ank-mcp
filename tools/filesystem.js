@@ -11,8 +11,7 @@ export function registerFilesystemTools(server, config) {
         try { const s = statSync(path + "/" + f); return (s.isDirectory() ? "📁 " : "📄 ") + f; }
         catch { return "❓ " + f; }
       });
-      return { content: [{ type: "text", text: files.join("
-") || "(vacío)" }] };
+      return { content: [{ type: "text", text: files.join("\n") || "(vacío)" }] };
     } catch (e) { return { content: [{ type: "text", text: "❌ " + e.message }] }; }
   });
 

@@ -16,7 +16,7 @@ export function registerTermuxApiTools(server) {
     { title: z.string(), content: z.string() },
     async ({ title, content }) => {
       try {
-        run("termux-notification --title "" + title + "" --content "" + content + """);
+        run(`termux-notification --title "${title}" --content "${content}"`);
         return { content: [{ type: "text", text: "✅ Notificación enviada" }] };
       } catch (e) { return { content: [{ type: "text", text: "❌ " + e.message }] }; }
     }
@@ -26,7 +26,7 @@ export function registerTermuxApiTools(server) {
   server.tool("vibrate",
     { duration: z.number().optional().describe("ms (default 300)") },
     async ({ duration = 300 }) => {
-      try { run("termux-vibrate -d " + duration); return { content: [{ type: "text", text: "📳 Vibrado" }] }; }
+      try { run(`termux-vibrate -d ${duration}`); return { content: [{ type: "text", text: "📳 Vibrado" }] }; }
       catch (e) { return { content: [{ type: "text", text: "❌ " + e.message }] }; }
     }
   );
@@ -36,7 +36,7 @@ export function registerTermuxApiTools(server) {
     { text: z.string(), language: z.string().optional() },
     async ({ text, language = "es" }) => {
       try {
-        execSync("termux-tts-speak -l " + language, { input: text, encoding: "utf-8" });
+        execSync(`termux-tts-speak -l ${language}`, { input: text, encoding: "utf-8" });
         return { content: [{ type: "text", text: "🔊 Hablando..." }] };
       } catch (e) { return { content: [{ type: "text", text: "❌ " + e.message }] }; }
     }

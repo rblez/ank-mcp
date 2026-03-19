@@ -4,10 +4,12 @@
   "description": "Universal Android agent via MCP — control your Android from any LLM",
   "type": "module",
   "bin": {
-    "ank-mcp": "bin/start.js"
+    "ank-mcp": "bin/cli.js"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "setup": "node scripts/setup.js",
+    "cli": "node bin/cli.js"
   },
   "keywords": [
     "mcp",
