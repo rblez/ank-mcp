@@ -1,6 +1,6 @@
 {
   "name": "ank-mcp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Universal Android agent via MCP — control your Android from any LLM",
   "type": "module",
   "bin": {
