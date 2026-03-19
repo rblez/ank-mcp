@@ -1,20 +1,29 @@
 {
   "name": "ank-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Universal Android agent via MCP — control your Android from any LLM",
   "type": "module",
   "bin": {
-    "ank-mcp": "./bin/start.js"
+    "ank-mcp": "bin/start.js"
   },
   "scripts": {
     "start": "node server.js"
   },
-  "keywords": ["mcp", "android", "termux", "claude", "cursor", "windsurf", "llm", "agent"],
+  "keywords": [
+    "mcp",
+    "android",
+    "termux",
+    "claude",
+    "cursor",
+    "windsurf",
+    "llm",
+    "agent"
+  ],
   "author": "rblez",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rblez/ank-mcp"
+    "url": "git+https://github.com/rblez/ank-mcp.git"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.1",
