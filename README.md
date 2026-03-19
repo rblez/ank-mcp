@@ -1,169 +1,102 @@
-# android-mcp 📱
+# ⚡ Ank MCP
 
-> Control total de tu Android desde Claude — sin Claude Code, puro MCP.
+> Universal Android agent via MCP — control your Android from any LLM.
 
 ```
-Claude.ai Mobile  ──SSE/HTTP──▶  Termux Node.js  ──▶  Android FS + Shell
+Claude ─┐
+Cursor ─┤──→ Ank MCP Server ──→ Android (filesystem + shell + hardware)
+Qwen   ─┤
+Windsurf┘
 ```
 
----
-
-## ¿Qué es esto?
-
-Un servidor **MCP (Model Context Protocol)** corriendo en **Termux** que expone tu sistema Android a Claude.ai. Leer archivos, escribir código, ejecutar comandos — todo desde el chat, autenticado con token único.
+Any LLM with MCP support can read files, run commands, and control your Android device — no root required.
 
 ---
 
-## Stack
+## Requirements
 
-| Pieza | Rol |
-|-------|-----|
-| **Termux** | Entorno Linux en Android |
-| **Node.js v25+** | Runtime del servidor |
-| **@modelcontextprotocol/sdk** | Protocolo MCP oficial |
-| **Express** | HTTP + SSE transport |
-| **Zod** | Validación de parámetros |
+- [Termux](https://f-droid.org/packages/com.termux/) from **F-Droid**
+- [Termux:API](https://f-droid.org/packages/com.termux.api/) from **F-Droid** (for hardware tools)
+- Node.js v18+ (`pkg install nodejs`)
+- cloudflared (`pkg install cloudflared`)
 
 ---
 
-## Tools disponibles
-
-| Tool | Descripción |
-|------|-------------|
-| `list_files` | Lista archivos de un directorio |
-| `read_file` | Lee el contenido de un archivo |
-| `write_file` | Escribe o sobreescribe un archivo |
-| `create_dir` | Crea carpetas recursivamente |
-| `file_exists` | Verifica si un path existe |
-| `run_command` | Ejecuta comandos shell en Termux |
-| `system_info` | IP, RAM, disco, uptime, versión Node |
-
----
-
-## Instalación
-
-### 1. Requisitos en Termux
+## Install
 
 ```bash
-pkg update && pkg upgrade -y
-pkg install nodejs git -y
-```
-
-### 2. Clonar y preparar
-
-```bash
-git clone https://github.com/rblez/android-mcp ~/android-mcp
-cd ~/android-mcp
+git clone https://github.com/rblez/ank-mcp
+cd ank-mcp
 npm install
 ```
 
-### 3. Configurar
+---
+
+## Configure
 
 ```bash
-# Genera tu token único
+# Generate a secure token
 node -e "console.log(crypto.randomUUID())"
 
-# Edita config.json con tu token
+# Edit config
 nano config.json
 ```
 
 ```json
 {
-  "token": "TU-UUID-AQUI",
+  "token": "YOUR-UUID-HERE",
   "port": 3000,
-  "allowed_paths": [
-    "/sdcard",
-    "/data/data/com.termux/files/home"
-  ],
+  "allowed_paths": ["/sdcard", "/data/data/com.termux/files/home"],
   "allow_shell": true
 }
 ```
 
-### 4. Obtener tu IP
+---
 
-```bash
-hostname -I
-# Ejemplo: 10.99.92.58  (WiFi local)
-#          100.x.x.x    (Tailscale — acceso remoto)
-```
-
-### 5. Arrancar
+## Start
 
 ```bash
 node server.js
 ```
 
-```
-🤖 Termux MCP listo
-📡 http://10.99.92.58:3000/sse
-🔑 Token: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-```
-
----
-
-## Conectar con Claude.ai
+The server will automatically:
+1. Start the MCP server on port 3000
+2. Launch a Cloudflare tunnel
+3. Print the full MCP URL with connection instructions
 
 ```
-claude.ai → Settings → Integrations → Add Integration
+⚡ Ank MCP v1.0.0
+────────────────────────────────────────────────────────────
+🔗 URL MCP:
+   https://xxxx-xxxx.trycloudflare.com/mcp?token=YOUR-TOKEN
 
-URL:   http://TU_IP:3000/sse
-Token: (el token de config.json)
-```
+📋 INSTRUCCIONES PARA CONECTAR:
 
-> Requiere **Claude.ai Pro/Max**.
+   Claude.ai:
+   Settings → Integrations → Add Integration
+   URL: https://xxxx-xxxx.trycloudflare.com/mcp?token=YOUR-TOKEN
 
----
-
-## Auto-start con Termux:Boot
-
-```bash
-pkg install termux-boot -y
-mkdir -p ~/.termux/boot
-
-cat > ~/.termux/boot/start-mcp.sh << 'EOF'
-#!/data/data/com.termux/files/usr/bin/sh
-cd ~/android-mcp
-node server.js >> ~/mcp.log 2>&1 &
-EOF
-
-chmod +x ~/.termux/boot/start-mcp.sh
-```
-
-El servidor arranca solo cada vez que reinicias el dispositivo.
-
----
-
-## Acceso remoto con Tailscale
-
-Si tienes Tailscale instalado en Android, usa la IP `100.x.x.x` en lugar de la IP local. Acceso seguro desde cualquier red sin ngrok ni túneles extra.
-
----
-
-## Seguridad
-
-- Autenticación por **Bearer Token** en cada request
-- Rutas del filesystem restringidas por `allowed_paths` en config
-- `allow_shell: false` para deshabilitar ejecución de comandos
-
----
-
-## Estructura
-
-```
-android-mcp/
-├── config.json       ← token + puertos + rutas permitidas
-├── server.js         ← MCP server + SSE transport
-├── tools/
-│   ├── filesystem.js ← read/write/list/mkdir
-│   ├── shell.js      ← run_command
-│   └── system.js     ← system_info
-└── package.json
+   Cursor / Windsurf — mcp.json:
+   { "ank-mcp": { "url": "https://xxxx.trycloudflare.com/mcp?token=YOUR-TOKEN" } }
 ```
 
 ---
 
-## Autor
+## Tools (28 total)
+
+| Category | Tools |
+|----------|-------|
+| 📁 **filesystem** | `list_files` `read_file` `write_file` `create_dir` `file_exists` `delete_file` |
+| 🖥️ **shell** | `run_command` `run_background` |
+| 📊 **system** | `system_info` |
+| 📱 **termux-api** | `battery_status` `clipboard_get/set` `get_location` `take_photo` `read_sms` `send_sms` `list_contacts` `send_notification` `speak` `wifi_info` `torch` `vibrate` |
+| 🌐 **browser** | `open_url` `fetch_url` `download_file` |
+| 📦 **apps** | `list_apps` `open_app` `screenshot` `input_text` `tap` `swipe` `keyevent` |
+
+---
+
+## Author
 
 **rblez** — [rblez.com](https://rblez.com) · [x.com/rblezX](https://x.com/rblezX) · [github.com/rblez](https://github.com/rblez)
 
-> *30d de programación vs 72h de trabajo rápido e inteligente* ⚡
+> *72h beats 30 days* ⚡

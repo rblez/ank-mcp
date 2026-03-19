@@ -1,18 +1,24 @@
 {
-  "name": "termux-mcp",
+  "name": "ank-mcp",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "description": "Universal Android agent via MCP — control your Android from any LLM",
   "type": "module",
+  "bin": {
+    "ank-mcp": "./bin/start.js"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["mcp", "android", "termux", "claude", "cursor", "windsurf", "llm", "agent"],
+  "author": "rblez",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rblez/ank-mcp"
+  },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.27.1",
-    "express": "^5.2.1",
-    "zod": "^4.3.6"
+    "@modelcontextprotocol/sdk": "^1.10.1",
+    "express": "^4.21.2",
+    "zod": "^3.24.2"
   }
 }
